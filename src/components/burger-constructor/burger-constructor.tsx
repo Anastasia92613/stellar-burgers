@@ -32,12 +32,14 @@ export const BurgerConstructor: FC = () => {
       navigate('/login', { state: { from: location } });
       return;
     }
-    const ingredients = constructorItems.ingredients.map((item) => item._id);
-    dispatch(orderBurger(ingredients));
+    const bunId = constructorItems.bun ? [constructorItems.bun._id] : [];
+    const ingredientsId = constructorItems.ingredients.map((item) => item._id);
+    dispatch(orderBurger([...bunId, ...ingredientsId]));
+    dispatch(clearConstructor());
   };
+
   const closeOrderModal = () => {
     dispatch(clearOrder());
-    dispatch(clearConstructor());
   };
 
   const price = useMemo(

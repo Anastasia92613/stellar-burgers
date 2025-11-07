@@ -1,6 +1,6 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { ResetPassword } from '../../pages/reset-password/reset-password';
 import { ConstructorPage } from '../../pages/constructor-page/constructor-page';
@@ -16,28 +16,19 @@ import { OrderInfo } from '../../components/order-info/order-info';
 import { Modal } from '../../components/modal/modal';
 import { AppHeader } from '../../components/app-header/app-header';
 import styles from './app.module.css';
-
-import { useDispatch, useSelector } from '../../services/store';
+import { useDispatch } from '../../services/store';
 import { getIngredient } from '../../services/slices/ingredientsSlice';
-import { getFeeds, getUserOrders } from '../../services/slices/ordersSlice';
 import { getUser } from '../../services/slices/userSlice';
-import { orderBurgerSuccessSelector } from '../../services/selectors/orderBurgerSelector';
 
 const App = () => {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
   const dispatch = useDispatch();
-  const success = useSelector(orderBurgerSuccessSelector);
 
   useEffect(() => {
     dispatch(getIngredient());
     dispatch(getUser());
   }, []);
-
-  useEffect(() => {
-    dispatch(getUserOrders());
-    dispatch(getFeeds());
-  }, [success]);
 
   const handleCloseModal = () => {
     window.history.back();

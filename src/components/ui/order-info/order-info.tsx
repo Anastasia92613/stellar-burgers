@@ -23,6 +23,7 @@ export const OrderInfoUI: FC<OrderInfoUIProps> = memo(({ orderInfo }) => (
           key={item._id}
           to={`/feed/${item._id}`}
           state={{ backgroundLocation: location }}
+          className={styles.link}
         >
           <li className={`pb-4 pr-6 ${styles.item}`} key={index}>
             <div className={styles.img_wrap}>

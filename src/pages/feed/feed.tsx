@@ -5,9 +5,16 @@ import { FC, useEffect } from 'react';
 import { orderFeedsSelector } from '../../services/selectors/ordersSelector';
 import { useDispatch, useSelector } from '../../services/store';
 import { getFeeds } from '../../services/slices/ordersSlice';
+import { orderBurgerSuccessSelector } from '../../services/selectors/orderBurgerSelector';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
+  const success = useSelector(orderBurgerSuccessSelector);
+
+  useEffect(() => {
+    dispatch(getFeeds());
+  }, [success]);
+
   const orders: TOrder[] = useSelector(orderFeedsSelector);
 
   if (!orders.length) {
