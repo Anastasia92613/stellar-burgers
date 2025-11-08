@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 interface TConstructorItems {
@@ -18,12 +18,16 @@ export const constructorItemsSlice = createSlice({
     addBun: (state, action) => {
       state.bun = action.payload;
     },
-    addIngredient: (state, action) => {
-      const ingredientWithId = {
-        ...action.payload,
-        id: nanoid()
-      };
-      state.ingredients.push(ingredientWithId);
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        state.ingredients.push(action.payload);
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: {
+          ...ingredient,
+          id: nanoid()
+        } as TConstructorIngredient
+      })
     },
     moveIngredient: (state, action) => {
       const { fromIndex, toIndex } = action.payload;
@@ -52,5 +56,3 @@ export const {
   clearConstructor
 } = constructorItemsSlice.actions;
 export default constructorItemsSlice.reducer;
-
-// constructorItemsSlice.ts

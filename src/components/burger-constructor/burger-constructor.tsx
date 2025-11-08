@@ -32,9 +32,14 @@ export const BurgerConstructor: FC = () => {
       navigate('/login', { state: { from: location } });
       return;
     }
-    const bunId = constructorItems.bun ? [constructorItems.bun._id] : [];
     const ingredientsId = constructorItems.ingredients.map((item) => item._id);
-    dispatch(orderBurger([...bunId, ...ingredientsId]));
+    dispatch(
+      orderBurger([
+        constructorItems.bun._id,
+        ...ingredientsId,
+        constructorItems.bun._id
+      ])
+    );
     dispatch(clearConstructor());
   };
 
