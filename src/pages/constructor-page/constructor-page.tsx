@@ -6,10 +6,11 @@ import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC } from 'react';
+import { ingredientRequestSelector } from '../../services/selectors/ingredientsSelector';
+import { Outlet } from 'react-router-dom';
 
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const isIngredientsLoading = useSelector(ingredientRequestSelector);
 
   return (
     <>
@@ -25,6 +26,7 @@ export const ConstructorPage: FC = () => {
           <div className={`${styles.main} pl-5 pr-5`}>
             <BurgerIngredients />
             <BurgerConstructor />
+            <Outlet />
           </div>
         </main>
       )}
