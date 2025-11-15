@@ -4,7 +4,7 @@ import { Preloader } from '../ui/preloader/preloader';
 import {
   getUserIsAuhCheckedSelector,
   getUserSelector
-} from '../../services/selectors/userSelector';
+} from '../../services/selectors/userSelector/userSelector';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;

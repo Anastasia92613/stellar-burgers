@@ -2,9 +2,9 @@ import { FC, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient, TOrder } from '@utils-types';
-import { ingredientsSelector } from '../../services/selectors/ingredientsSelector';
+import { ingredientsSelector } from '../../services/selectors/ingredientsSelector/ingredientsSelector';
 import { useSelector } from '../../services/store';
-import { orderFeedsSelector } from '../../services/selectors/ordersSelector';
+import { orderFeedsSelector } from '../../services/selectors/ordersSelector/ordersSelector';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {

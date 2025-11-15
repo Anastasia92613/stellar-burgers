@@ -6,7 +6,7 @@ import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC } from 'react';
-import { ingredientRequestSelector } from '../../services/selectors/ingredientsSelector';
+import { ingredientRequestSelector } from '../../services/selectors/ingredientsSelector/ingredientsSelector';
 import { Outlet } from 'react-router-dom';
 
 export const ConstructorPage: FC = () => {

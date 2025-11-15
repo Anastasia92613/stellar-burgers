@@ -17,8 +17,8 @@ import { Modal } from '../../components/modal/modal';
 import { AppHeader } from '../../components/app-header/app-header';
 import styles from './app.module.css';
 import { useDispatch } from '../../services/store';
-import { getIngredient } from '../../services/slices/ingredientsSlice';
-import { getUser } from '../../services/slices/userSlice';
+import { getIngredient } from '../../services/slices/ingredientsSlice/ingredientsSlice';
+import { getUser } from '../../services/slices/userSlice/userSlice';
 
 const App = () => {
   const location = useLocation();
