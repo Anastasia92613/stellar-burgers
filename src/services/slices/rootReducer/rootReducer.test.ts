@@ -21,7 +21,7 @@ describe('rootReducer', () => {
       constructorItems: constructorItemsReducer(undefined, { type: '@@INIT' })
     });
   });
-  
+
   it('проверяет инициализацию с undefined состоянием', () => {
     const initialState = rootReducer(undefined, { type: '@@INIT' });
 

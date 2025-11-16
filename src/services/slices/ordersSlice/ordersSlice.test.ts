@@ -6,10 +6,7 @@ import ordersReducer, {
 } from './ordersSlice';
 
 describe('тестирует редьюсер ordersSlice', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
+  // Моковые данные для переиспользования
   const mockOrder = {
     _id: 'order-1',
     ingredients: ['ingredient1', 'ingredient2'],
@@ -21,6 +18,7 @@ describe('тестирует редьюсер ordersSlice', () => {
   };
 
   const mockUserOrders = [mockOrder];
+  const mockOrder2 = { ...mockOrder, _id: 'order-2', number: 12346 };
 
   const mockOrderByNumberResponse = {
     success: true,
@@ -29,10 +27,24 @@ describe('тестирует редьюсер ordersSlice', () => {
 
   const mockFeedsResponse = {
     success: true,
-    orders: [mockOrder, { ...mockOrder, _id: 'order-2', number: 12346 }],
+    orders: [mockOrder, mockOrder2],
     total: 100,
     totalToday: 10
   };
+
+  const mockErrorResponse = { success: false, message: 'Ошибка' };
+  const mockOrderNotFoundResponse = {
+    success: false,
+    message: 'Заказ не найден'
+  };
+  const mockFeedsErrorResponse = {
+    success: false,
+    message: 'Ошибка получения заказов'
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('тестирует успешный getUserOrders', async () => {
     global.fetch = jest.fn(() =>
@@ -72,7 +84,7 @@ describe('тестирует редьюсер ordersSlice', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,
-        json: () => Promise.resolve({ success: false, message: 'Ошибка' })
+        json: () => Promise.resolve(mockErrorResponse)
       })
     ) as jest.Mock;
 
@@ -122,12 +134,10 @@ describe('тестирует редьюсер ordersSlice', () => {
   });
 
   test('тестирует неуспешный orderByNumber', async () => {
-    const errorResponse = { success: false, message: 'Заказ не найден' };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(errorResponse)
+        json: () => Promise.resolve(mockOrderNotFoundResponse)
       })
     ) as jest.Mock;
 
@@ -177,15 +187,10 @@ describe('тестирует редьюсер ordersSlice', () => {
   });
 
   test('тестирует неуспешный getFeeds', async () => {
-    const errorResponse = {
-      success: false,
-      message: 'Ошибка получения заказов'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(errorResponse)
+        json: () => Promise.resolve(mockFeedsErrorResponse)
       })
     ) as jest.Mock;
 

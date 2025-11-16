@@ -2,10 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import forgotPasswordReducer, { forgotPassword } from './forgotPasswordSlice';
 
 describe('тестирует редьюсер forgotPasswordSlice', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   const mockEmail = 'test@example.com';
 
   const mockSuccessResponse = {
@@ -17,6 +13,10 @@ describe('тестирует редьюсер forgotPasswordSlice', () => {
     success: false,
     message: 'Пользователь не найден'
   };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('тестирует успешный forgotPassword', async () => {
     global.fetch = jest.fn(() =>

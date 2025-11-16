@@ -49,6 +49,18 @@ describe('тестирует редьюсер constructorItemsSlice', () => {
     image_large: 'ingredient2-large.jpg'
   };
 
+  const mockIngredient3 = {
+    ...mockIngredient1,
+    _id: 'ingredient-3',
+    name: 'Соус'
+  };
+
+  const newBun = {
+    ...mockBun,
+    _id: 'bun-2',
+    name: 'Новая булка'
+  };
+
   test('тестирует addBun', () => {
     const action = addBun(mockBun);
     const state = constructorItemsReducer(undefined, action);
@@ -61,7 +73,6 @@ describe('тестирует редьюсер constructorItemsSlice', () => {
     let state = constructorItemsReducer(undefined, addBun(mockBun));
     expect(state.bun).toEqual(mockBun);
 
-    const newBun = { ...mockBun, _id: 'bun-2', name: 'Новая булка' };
     state = constructorItemsReducer(state, addBun(newBun));
 
     expect(state.bun).toEqual(newBun);
@@ -116,14 +127,7 @@ describe('тестирует редьюсер constructorItemsSlice', () => {
       addIngredient(mockIngredient1)
     );
     state = constructorItemsReducer(state, addIngredient(mockIngredient2));
-    state = constructorItemsReducer(
-      state,
-      addIngredient({
-        ...mockIngredient1,
-        _id: 'ingredient-3',
-        name: 'Соус'
-      })
-    );
+    state = constructorItemsReducer(state, addIngredient(mockIngredient3));
 
     const initialOrder = state.ingredients.map((item) => item._id);
 

@@ -2,10 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import resetPasswordReducer, { resetPassword } from './resetPasswordSlice';
 
 describe('тестирует редьюсер resetPasswordSlice', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   const mockPassword = 'newPassword123';
   const mockToken = 'reset-token-123';
 
@@ -18,6 +14,10 @@ describe('тестирует редьюсер resetPasswordSlice', () => {
     success: false,
     message: 'Неверный токен'
   };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('тестирует успешный resetPassword', async () => {
     global.fetch = jest.fn(() =>

@@ -8,21 +8,86 @@ import userReducer, {
 } from '../userSlice/userSlice';
 
 describe('тестирует редьюсер userSlice', () => {
+  const mockUser = {
+    email: 'test@mail.ru',
+    name: 'test'
+  };
+
+  const mockUpdatedUser = {
+    email: 'updated@mail.ru',
+    name: 'updated name'
+  };
+
+  const mockSuccessResponse = {
+    success: true,
+    user: mockUser
+  };
+
+  const mockLoginResponse = {
+    success: true,
+    user: mockUser,
+    accessToken: 'mock-access-token',
+    refreshToken: 'mock-refresh-token'
+  };
+
+  const mockRegisterResponse = {
+    success: true,
+    user: mockUser,
+    accessToken: 'mock-access-token',
+    refreshToken: 'mock-refresh-token'
+  };
+
+  const registerData = {
+    email: 'newuser@mail.ru',
+    password: 'password123',
+    name: 'NewUser'
+  };
+
+  const registerDataError = {
+    email: 'existing@mail.ru',
+    password: 'password123',
+    name: 'Existing User'
+  };
+
+  const mockUpdateResponse = {
+    success: true,
+    user: mockUpdatedUser
+  };
+
+  const mockLogoutResponse = {
+    success: true
+  };
+
+  const mockErrorResponse = {
+    success: false,
+    message: 'Ошибка сервера'
+  };
+
+  const mockLoginErrorResponse = {
+    success: false,
+    message: 'Неверный email или пароль'
+  };
+
+  const mockRegisterErrorResponse = {
+    success: false,
+    message: 'Пользователь уже существует'
+  };
+
+  const mockUpdateErrorResponse = {
+    success: false,
+    message: 'Ошибка обновления'
+  };
+
+  const mockLogoutErrorResponse = {
+    success: false,
+    message: 'Ошибка выхода'
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('тестирует успешное getUser', async () => {
-    const mockUser = {
-      email: 'test@mail.ru',
-      name: 'test'
-    };
-
-    const mockResponse = {
-      success: true,
-      user: mockUser
-    };
-
     let resolveFetch: (value: any) => void;
     const fetchPromise = new Promise((resolve) => {
       resolveFetch = resolve;
@@ -54,7 +119,7 @@ describe('тестирует редьюсер userSlice', () => {
 
     resolveFetch!({
       ok: true,
-      json: () => Promise.resolve(mockResponse)
+      json: () => Promise.resolve(mockSuccessResponse)
     });
 
     await dispatchPromise;
@@ -67,15 +132,10 @@ describe('тестирует редьюсер userSlice', () => {
   });
 
   test('тестирует с ошибкой getUser', async () => {
-    const errorResponse = {
-      success: false,
-      message: 'Ошибка сервера'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(errorResponse)
+        json: () => Promise.resolve(mockErrorResponse)
       })
     ) as jest.Mock;
 
@@ -91,28 +151,16 @@ describe('тестирует редьюсер userSlice', () => {
 
     const rejectedState = store.getState().user;
     expect(rejectedState.userRequest).toBe(false);
-    expect(rejectedState.userError).toEqual(errorResponse);
+    expect(rejectedState.userError).toEqual(mockErrorResponse);
     expect(rejectedState.user).toBeNull();
     expect(rejectedState.isAuthChecked).toBe(true);
   });
 
   test('тестирует успешный loginUser', async () => {
-    const mockUser = {
-      email: 'test@mail.ru',
-      name: 'test'
-    };
-
-    const mockResponse = {
-      success: true,
-      user: mockUser,
-      accessToken: 'mock-access-token',
-      refreshToken: 'mock-refresh-token'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockLoginResponse)
       })
     ) as jest.Mock;
 
@@ -173,15 +221,10 @@ describe('тестирует редьюсер userSlice', () => {
   });
 
   test('тестирует неуспешный loginUser', async () => {
-    const errorResponse = {
-      success: false,
-      message: 'Неверный email или пароль'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(errorResponse)
+        json: () => Promise.resolve(mockLoginErrorResponse)
       })
     ) as jest.Mock;
 
@@ -202,25 +245,10 @@ describe('тестирует редьюсер userSlice', () => {
   });
 
   test('тестирует успешный updateUser', async () => {
-    const mockUser = {
-      email: 'test@mail.ru',
-      name: 'test'
-    };
-
-    const updatedUser = {
-      email: 'updated@mail.ru',
-      name: 'updated name'
-    };
-
-    const mockResponse = {
-      success: true,
-      user: updatedUser
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockUpdateResponse)
       })
     ) as jest.Mock;
 
@@ -256,24 +284,14 @@ describe('тестирует редьюсер userSlice', () => {
     const fulfilledState = store.getState().user;
     expect(fulfilledState.userRequest).toBe(false);
     expect(fulfilledState.userError).toBeNull();
-    expect(fulfilledState.user).toEqual(updatedUser);
+    expect(fulfilledState.user).toEqual(mockUpdatedUser);
   });
 
   test('тестирует неуспешный updateUser', async () => {
-    const mockUser = {
-      email: 'test@mail.ru',
-      name: 'test'
-    };
-
-    const errorResponse = {
-      success: false,
-      message: 'Ошибка обновления'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(errorResponse)
+        json: () => Promise.resolve(mockUpdateErrorResponse)
       })
     ) as jest.Mock;
 
@@ -299,22 +317,10 @@ describe('тестирует редьюсер userSlice', () => {
   });
 
   test('тестирует успешный registerUser', async () => {
-    const mockUser = {
-      email: 'newuser@mail.ru',
-      name: 'NewUser'
-    };
-
-    const mockResponse = {
-      success: true,
-      user: mockUser,
-      accessToken: 'mock-access-token',
-      refreshToken: 'mock-refresh-token'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockRegisterResponse)
       })
     ) as jest.Mock;
 
@@ -343,12 +349,6 @@ describe('тестирует редьюсер userSlice', () => {
     expect(initialState.user).toBeNull();
     expect(initialState.isAuthChecked).toBe(false);
     expect(initialState.isAuthenticated).toBe(false);
-
-    const registerData = {
-      email: 'newuser@mail.ru',
-      password: 'password123',
-      name: 'NewUser'
-    };
 
     const dispatchPromise = store.dispatch(registerUser(registerData));
 
@@ -379,15 +379,10 @@ describe('тестирует редьюсер userSlice', () => {
   });
 
   test('тестирует неуспешный registerUser', async () => {
-    const errorResponse = {
-      success: false,
-      message: 'Пользователь уже существует'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(errorResponse)
+        json: () => Promise.resolve(mockRegisterErrorResponse)
       })
     ) as jest.Mock;
 
@@ -410,13 +405,7 @@ describe('тестирует редьюсер userSlice', () => {
       reducer: { user: userReducer }
     });
 
-    const registerData = {
-      email: 'existing@mail.ru',
-      password: 'password123',
-      name: 'Existing User'
-    };
-
-    await store.dispatch(registerUser(registerData));
+    await store.dispatch(registerUser(registerDataError));
 
     const rejectedState = store.getState().user;
     expect(rejectedState.userRequest).toBe(false);
@@ -430,19 +419,10 @@ describe('тестирует редьюсер userSlice', () => {
   });
 
   test('тестирует успешный logout', async () => {
-    const mockUser = {
-      email: 'test@mail.ru',
-      name: 'test'
-    };
-
-    const mockResponse = {
-      success: true
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve(mockLogoutResponse)
       })
     ) as jest.Mock;
 
@@ -502,20 +482,10 @@ describe('тестирует редьюсер userSlice', () => {
   });
 
   test('тестирует неуспешный logout', async () => {
-    const mockUser = {
-      email: 'test@mail.ru',
-      name: 'test'
-    };
-
-    const errorResponse = {
-      success: false,
-      message: 'Ошибка выхода'
-    };
-
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(errorResponse)
+        json: () => Promise.resolve(mockLogoutErrorResponse)
       })
     ) as jest.Mock;
 
@@ -553,8 +523,8 @@ describe('тестирует редьюсер userSlice', () => {
     const rejectedState = store.getState().user;
     expect(rejectedState.userRequest).toBe(false);
     expect(rejectedState.userError).not.toBeNull();
-    expect(rejectedState.user).toEqual(mockUser); // Пользователь остался
-    expect(rejectedState.isAuthenticated).toBe(true); // Остался аутентифицирован
+    expect(rejectedState.user).toEqual(mockUser);
+    expect(rejectedState.isAuthenticated).toBe(true);
 
     expect(deleteCookieMock).not.toHaveBeenCalled();
     expect(localStorageRemoveItemMock).not.toHaveBeenCalled();

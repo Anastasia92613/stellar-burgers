@@ -1,24 +1,36 @@
+const baseUrl = 'http://localhost:4000/';
+
 describe('проверяем доступность приложения', function() {
     it('сервис должен быть доступен по адресу localhost:4000', function() {
-        cy.visit('http://localhost:4000/'); 
+        cy.visit(baseUrl); 
     });
 });
 
 describe('проверяем страницу конструктора бургеров', function() {
     beforeEach(() => {
+        cy.setCookie('accessToken', 'test-token');
+        window.localStorage.setItem('refreshToken', 'test-refresh-token');
+
         cy.intercept('GET', 'api/ingredients', {
             fixture: 'ingredients.json'
         }).as('getIngredientsApi')
-        cy.visit('http://localhost:4000/')
-        cy.wait('@getIngredientsApi')
 
-        cy.setCookie('accessToken', 'test-token');
-        window.localStorage.setItem('accessToken', 'test-token');
         cy.intercept('GET', '/api/auth/user', {
             success: true,
             user: { name: 'Test', email: 'test@mail.ru' }
-        });
+        }).as('getUser');
+
+        cy.visit(baseUrl);
+        cy.wait('@getIngredientsApi');
+
     });
+
+    afterEach(() => {
+        cy.clearCookie('accessToken');
+        cy.clearCookies();
+        window.localStorage.removeItem('refreshToken');
+        window.localStorage.clear();
+    })
 
     it('проверяем, что ингредиентов добавляется в конструктор', () => {
 
@@ -56,8 +68,8 @@ describe('проверяем страницу конструктора бург�
 
         const buttonOrder = cy.get('[data-cy="order"]').find('button');
         buttonOrder.click();
-        const orderNumber = cy.get('[data-cy="order-number"]');
 
+        const orderNumber = cy.get('[data-cy="order-number"]');
         orderNumber.should('be.visible');
         orderNumber.should('contain', '12345');
 
@@ -66,7 +78,6 @@ describe('проверяем страницу конструктора бург�
         orderNumber.should('not.exist');
 
         const constructor = cy.get('[data-cy="constructor"]');
-
         constructor.should('contain', 'Выберите булки');
         constructor.should('contain', 'Выберите начинку')
 

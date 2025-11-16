@@ -2,10 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import ingredientsReducer, { getIngredient } from './ingredientsSlice';
 
 describe('тестирует редьюсер ingredientsSlice', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   const mockIngredients = [
     {
       _id: '1',
@@ -35,15 +31,25 @@ describe('тестирует редьюсер ingredientsSlice', () => {
     }
   ];
 
+  const mockSuccessResponse = {
+    success: true,
+    data: mockIngredients
+  };
+
+  const mockErrorResponse = {
+    success: false,
+    data: mockIngredients
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('тестирует успешный getIngredient', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () =>
-          Promise.resolve({
-            success: true,
-            data: mockIngredients
-          })
+        json: () => Promise.resolve(mockSuccessResponse)
       })
     ) as jest.Mock;
 
@@ -75,11 +81,7 @@ describe('тестирует редьюсер ingredientsSlice', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
-        json: () =>
-          Promise.resolve({
-            success: false,
-            data: mockIngredients
-          })
+        json: () => Promise.resolve(mockErrorResponse)
       })
     ) as jest.Mock;
 

@@ -5,10 +5,6 @@ import orderBurgerReducer, {
 } from './orderBurgerSlice';
 
 describe('тестирует редьюсер orderBurgerSlice', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   const mockOrder = {
     _id: '123',
     ingredients: ['ingredient1', 'ingredient2'],
@@ -29,6 +25,13 @@ describe('тестирует редьюсер orderBurgerSlice', () => {
     success: false,
     message: 'Ошибка создания заказа'
   };
+
+  const mockIngredients = ['ingredient1', 'ingredient2'];
+  const mockSingleIngredient = ['ingredient1'];
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('тестирует успешный orderBurger', async () => {
     global.fetch = jest.fn(() =>
@@ -52,8 +55,7 @@ describe('тестирует редьюсер orderBurgerSlice', () => {
     expect(initialState.orderModalData).toBeNull();
     expect(initialState.success).toBe(false);
 
-    const ingredients = ['ingredient1', 'ingredient2'];
-    const dispatchPromise = store.dispatch(orderBurger(ingredients));
+    const dispatchPromise = store.dispatch(orderBurger(mockIngredients));
 
     const pendingState = store.getState().orderBurger;
     expect(pendingState.orderBurgerRequest).toBe(true);
@@ -77,7 +79,7 @@ describe('тестирует редьюсер orderBurgerSlice', () => {
           'Content-Type': 'application/json;charset=utf-8',
           authorization: 'mock-token'
         }),
-        body: JSON.stringify({ ingredients })
+        body: JSON.stringify({ ingredients: mockIngredients })
       })
     );
   });
@@ -98,7 +100,7 @@ describe('тестирует редьюсер orderBurgerSlice', () => {
       reducer: { orderBurger: orderBurgerReducer }
     });
 
-    await store.dispatch(orderBurger(['ingredient1', 'ingredient2']));
+    await store.dispatch(orderBurger(mockIngredients));
 
     const rejectedState = store.getState().orderBurger;
 
@@ -167,7 +169,7 @@ describe('тестирует редьюсер orderBurgerSlice', () => {
       reducer: { orderBurger: orderBurgerReducer }
     });
 
-    await store.dispatch(orderBurger(['ingredient1']));
+    await store.dispatch(orderBurger(mockSingleIngredient));
 
     const rejectedState = store.getState().orderBurger;
     expect(rejectedState.orderBurgerRequest).toBe(false);
