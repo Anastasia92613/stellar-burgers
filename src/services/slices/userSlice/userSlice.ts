@@ -7,12 +7,10 @@ import {
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TRegisterData, TUser } from '@utils-types';
-import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../../../utils/cookie';
 
 interface TGetUserState {
   user: TUser | null;
-  getUserRequest: boolean;
-  getUserError: string | null;
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   userError: string | null;
@@ -21,8 +19,6 @@ interface TGetUserState {
 
 const initialState: TGetUserState = {
   user: null,
-  getUserRequest: false,
-  getUserError: null,
   isAuthChecked: false,
   isAuthenticated: false,
   userError: null,
@@ -107,18 +103,18 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getUser.pending, (state) => {
-        state.getUserRequest = true;
-        state.getUserError = null;
+        state.userRequest = true;
+        state.userError = null;
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.getUserRequest = false;
-        state.getUserError = action.payload as string;
+        state.userRequest = false;
+        state.userError = action.payload as string;
         state.isAuthChecked = true;
         state.user = null;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        state.getUserRequest = false;
-        state.getUserError = null;
+        state.userRequest = false;
+        state.userError = null;
         state.user = action.payload.user;
         state.isAuthChecked = true;
       })
@@ -133,12 +129,13 @@ export const userSlice = createSlice({
         state.userError = action.payload as string;
         state.isAuthChecked = true;
       })
-      ///экшен для успешной асинхронной операции
+
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.userRequest = false;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
+        state.userError = null;
       })
       .addCase(updateUser.pending, (state) => {
         state.userRequest = true;

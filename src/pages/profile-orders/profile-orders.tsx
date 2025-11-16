@@ -1,10 +1,10 @@
 import { ProfileOrdersUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
-import { ordersSelector } from '../../services/selectors/ordersSelector';
+import { ordersSelector } from '../../services/selectors/ordersSelector/ordersSelector';
 import { useDispatch, useSelector } from '../../services/store';
-import { orderBurgerSuccessSelector } from '../../services/selectors/orderBurgerSelector';
-import { getUserOrders } from '../../services/slices/ordersSlice';
+import { orderBurgerSuccessSelector } from '../../services/selectors/orderBurgerSelector/orderBurgerSelector';
+import { getUserOrders } from '../../services/slices/ordersSlice/ordersSlice';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();

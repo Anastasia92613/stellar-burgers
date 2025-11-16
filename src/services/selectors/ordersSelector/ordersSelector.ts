@@ -1,4 +1,4 @@
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 export const ordersSelector = (state: RootState) => state.orders.orders;
 export const orderFeedsSelector = (state: RootState) => state.orders.ordersFeed;

@@ -1,4 +1,4 @@
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 export const getUserAllSelector = (state: RootState) => state.user;
 export const getUserSelector = (state: RootState) => state.user.user;

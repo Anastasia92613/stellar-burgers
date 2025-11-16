@@ -1,4 +1,4 @@
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 // Базовый селектор для получения всех ингридиентов
 export const ingredientsSelectorAll = (state: RootState) => state.ingredients;
